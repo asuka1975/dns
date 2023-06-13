@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  dns:
+    build: .
+    networks:
+      fixed_compose_network:
+        ipv4_address: 10.254.249.88
+
+  test:
+    build: 
+      context: .
+      dockerfile: Dockerfile1
+    
+    tty: true
+    command: sh -c "while :; do sleep 3600; done"
+    dns:
+      - 10.254.249.88
+    networks:
+      fixed_compose_network:
+        ipv4_address: 10.254.249.89
+
+networks:
+  fixed_compose_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.254.249.0/24
